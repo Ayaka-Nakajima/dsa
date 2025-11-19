@@ -1,11 +1,6 @@
 import networkx as nx
 from NAKAJIMA_AYAKA_1 import kruskal
 
-##test を教科書から取ってくる　最低でも10個はやる。
-#教授は50個くらいやるらしい
-#テストケースを作るためのプログラムを作る
-#テストケースフレームワークはあるのでそれを使ってもいい
-
 def w_of(G):
     return lambda e: G.edges[e]['weight']
 
@@ -98,7 +93,7 @@ def case7_two_triangles_bridge():
     bridge = [(3,4,5)]
     for u,v,w in t1+t2+bridge: G.add_edge(u,v,weight=w)
     return G
-# expected cost = (1+1) + (1+1) + 5 = 8
+# expected cost = (1+1) + (1+1) + 5 = 9
 
 def case8_k5_all_ones():
     # 8) K5 all weights 1 (many MSTs; check only cost)
@@ -134,7 +129,7 @@ def main():
     run_case(case4_path5,              10,   "Case4: Path(5)")
     run_case(case5_star_center0,       11,   "Case5: Star center 0")
     run_case(case6_negative_edges,     -1,   "Case6: Negative edges")
-    run_case(case7_two_triangles_bridge,8,    "Case7: Two triangles + bridge")
+    run_case(case7_two_triangles_bridge,9,    "Case7: Two triangles + bridge")
     run_case(case8_k5_all_ones,        4,    "Case8: K5 all ones")
     run_case(case9_floats,             0.6,  "Case9: Floating weights")
     run_case(case10_square_heavy_diag, 3,    "Case10: Square heavy diag")

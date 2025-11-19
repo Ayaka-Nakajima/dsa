@@ -59,20 +59,35 @@ class DisjointSets:
             self.rank[rx] += 1
         return True
 
-def kruskal(G, w): #prosedure kruskal(G, w)
-    T = nx.Graph() # X= {} T = (V, ∅)
+def kruskal(G, w):
+    T = nx.Graph()
     for v in G.nodes:
-        T.add_node(v) 
+        T.add_node(v)
 
-    ds = DisjointSets(G.nodes) # for all u in V: makeset(u)
+    ds = DisjointSets(G.nodes)
 
-    # sort the edges E by weight
     edges_sorted = sorted(G.edges, key=lambda e: w(e))
 
-    #for edges {u, v} in E, in increasing order of weight:
+    # デバッグ用: ソートされた全エッジを出す
+    print("=== all edges sorted by weight ===")
     for (u, v) in edges_sorted:
-        if ds.find(u) != ds.find(v): #if find(u) != find(v):
-            T.add_edge(u, v, weight=w((u, v))) #add edge {u, v} to X
-            ds.union(u, v) #union(u, v)
+        print(f"edge {u}-{v} weight={w((u, v))}")
+
+    chosen = []
+    for (u, v) in edges_sorted:
+        if ds.find(u) != ds.find(v):
+            T.add_edge(u, v, weight=w((u, v)))
+            ds.union(u, v)
+            chosen.append((u, v, w((u, v))))
+
+    # デバッグ用: 選ばれたエッジを出す
+    print("=== chosen edges (MST candidate) ===")
+    total = 0
+    for u, v, wt in chosen:
+        print(f"edge {u}-{v} weight={wt}")
+        total += wt
+    print("total weight:", total)
+    print("num edges:", len(chosen))
+
     return T
 
