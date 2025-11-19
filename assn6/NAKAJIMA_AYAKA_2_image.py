@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from maze import G
-from NAKAJIMA_AYAKA_2 import bfs_shortest_path
+from kuruskals_algo import bfs_shortest_path
 
 def draw_maze_with_path(G, path=None, thin_alpha=0.15, lw_maze=0.8, lw_path=2.8):
     # 迷路の全通路（薄い線）

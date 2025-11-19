@@ -1,6 +1,6 @@
 
 import networkx as nx
-from NAKAJIMA_AYAKA_2 import dfs
+from kuruskals_algo import dfs
 
 
 NODES = list("ABCDEFGHIJKL")
