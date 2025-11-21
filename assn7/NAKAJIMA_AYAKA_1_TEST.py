@@ -27,9 +27,7 @@ def run_case(build_graph_fn, expected_cost, name, check_edges=None):
     if not ok_tree:  print("  - not a valid spanning tree")
     if not ok_edges: print("  - edge set mismatch")
 
-# -------------------------
-# 10 TEST CASE BUILDERS
-# -------------------------
+# testcases
 def case1_triangle():
     # 1) Triangle (unique MST)
     G = nx.Graph()

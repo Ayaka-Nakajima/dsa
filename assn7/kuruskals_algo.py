@@ -179,21 +179,4 @@ if __name__ == "__main__":
 
     print("== (e) Plot clusters ==")
     plot_clusters(G, labels, title=f"Clusters (K={num_clusters}) via Kruskal-MST cut")
-
-    # ---- Optional: 他距離で試す（Manhattan / Chebyshev） ----
-    # 課題の「Optional」用のヒント（必要に応じてコメントアウト解除）
-    # def build_graph_with_dist(points, distf):
-    #     H = nx.Graph()
-    #     for pid, x, y in points:
-    #         H.add_node(pid, x=x, y=y)
-    #     for (id1, x1, y1), (id2, x2, y2) in itertools.combinations([(p[0],p[1],p[2]) for p in points], 2):
-    #         H.add_edge(id1, id2, weight=distf((x1,y1),(x2,y2)))
-    #     return H
-    # L1 = lambda a,b: abs(a[0]-b[0]) + abs(a[1]-b[1])          # Manhattan
-    # Linf = lambda a,b: max(abs(a[0]-b[0]), abs(a[1]-b[1]))    # Chebyshev
-    # G_L1 = build_graph_with_dist(pts, L1); T_L1 = mst_kruskal(G_L1)
-    # labels_L1, _ = cluster_from_mst(T_L1, desired_k=desired_k)
-    # plot_clusters(G_L1, labels_L1, title=f"L1 Manhattan, K={desired_k}")
-    # G_Linf = build_graph_with_dist(pts, Linf); T_Linf = mst_kruskal(G_Linf)
-    # labels_Linf, _ = cluster_from_mst(T_Linf, desired_k=desired_k)
-    # plot_clusters(G_Linf, labels_Linf, title=f"L∞ Chebyshev, K={desired_k}")
+    
