@@ -2,41 +2,50 @@ import networkx as nx
 import math
 
 
-# ----------------------------------------------------------
-# Floyd–Warshall (教科書 Chapter 6, p.187)
-# ----------------------------------------------------------
 def floyd_warshall(G):
     """
-    G: networkx Graph
+    教科書 Chapter 6 の Floyd–Warshall を
+    2次元配列ベースで実装した版。
     戻り値: dist[(u, v)] の辞書
     """
-
     nodes = list(G.nodes())
-    dist = {}
+    n = len(nodes)
 
-    # 初期化
-    for u in nodes:
-        for v in nodes:
-            if u == v:
-                dist[(u, v)] = 0
-            elif G.has_edge(u, v):
-                dist[(u, v)] = 1  # エッジの重みは1（迷路なので無重み）
-            else:
-                dist[(u, v)] = math.inf
+    # ノード → インデックス の対応表
+    idx = {node: i for i, node in enumerate(nodes)}
 
-    # 教科書どおりの三重ループ
-    for k in nodes:
-        for i in nodes:
-            for j in nodes:
-                if dist[(i, j)] > dist[(i, k)] + dist[(k, j)]:
-                    dist[(i, j)] = dist[(i, k)] + dist[(k, j)]
+    # dist[i][j] テーブルを作成
+    dist = [[math.inf] * n for _ in range(n)]
+    for i in range(n):
+        dist[i][i] = 0
 
-    return dist
+    # エッジの重み（迷路なので全部 1）
+    for u, v in G.edges():
+        i = idx[u]
+        j = idx[v]
+        dist[i][j] = 1
+        dist[j][i] = 1      # 無向グラフ前提
+
+    # Floyd–Warshall 本体
+    for k in range(n):
+        for i in range(n):
+            dik = dist[i][k]
+            if dik == math.inf:
+                continue
+            for j in range(n):
+                new = dik + dist[k][j]
+                if new < dist[i][j]:
+                    dist[i][j] = new
+
+    # 辞書形式に変換して返す（課題仕様どおり）
+    dist_dict = {}
+    for i in range(n):
+        for j in range(n):
+            dist_dict[(nodes[i], nodes[j])] = dist[i][j]
+
+    return dist_dict
 
 
-# ----------------------------------------------------------
-# 最も遠いノード対を見つける
-# ----------------------------------------------------------
 def find_furthest_pairs(dist):
     max_dist = -1
     pairs = []
@@ -53,17 +62,13 @@ def find_furthest_pairs(dist):
     return max_dist, pairs
 
 
-# ----------------------------------------------------------
-# Main
-# ----------------------------------------------------------
 def main():
-    # Step (a): maze02.gml を読み込む
+    # maze02.gml を NAKAJIMA_AYAKA_3.py と同じフォルダに置いておくこと
     G = nx.read_gml("maze02.gml")
 
-    # Step (b): Floyd–Warshall を実行
-    dist = floyd_warshall(G)
+    print("nodes:", len(G.nodes()), "edges:", len(G.edges()))
 
-    # Step (c): 最長距離ノード対
+    dist = floyd_warshall(G)
     max_dist, pairs = find_furthest_pairs(dist)
 
     print("Longest shortest-path distance:", max_dist)

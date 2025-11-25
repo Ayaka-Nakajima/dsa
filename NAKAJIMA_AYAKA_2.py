@@ -65,11 +65,3 @@ def suggestions(word):
             best_words.append(w)
 
     return best_words
-
-
-# ----------------------------------------------------------
-# Module test (手動実行用)
-# ----------------------------------------------------------
-if __name__ == "__main__":
-    print(edit_distance("cat", "cut"))
-    print(suggestions("catt"))

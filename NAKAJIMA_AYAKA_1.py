@@ -8,6 +8,8 @@ def load_forest_tiles(filename="forest.csv"):
     forest = set()
     with open(filename, newline='') as f:
         reader = csv.reader(f)
+        next(reader, None)# skip header
+
         for row in reader:
             x, y = map(int, row)
             forest.add((x, y))
@@ -49,7 +51,6 @@ def greedy_set_cover(universe, sets):
         best_set = None
         best_cover = set()
 
-        # 教科書の貪欲法：最も多く U を覆う集合を選ぶ
         for loc, S in sets:
             cover = U & S
             if len(cover) > len(best_cover):
