@@ -1,9 +1,10 @@
 import csv
 import math
+"""
+Find optimal locations for resource extractors in a strategy game.
+"""
 
-# -----------------------------
-# Load forest tiles
-# -----------------------------
+#(b) Load forest tiles from CSV file
 def load_forest_tiles(filename="forest.csv"):
     forest = set()
     with open(filename, newline='') as f:
@@ -16,33 +17,36 @@ def load_forest_tiles(filename="forest.csv"):
     return forest
 
 
-# -----------------------------
-# Euclidean distance
-# -----------------------------
+#(c)
 def distance(a, b):
     return math.sqrt((a[0] - b[0])**2 + (a[1] - b[1])**2)
 
 
-# -----------------------------
-# Compute subsets S_i for all hut positions
-# -----------------------------
+#(a)
 def compute_hut_sets(forest):
     sets = []  # list of (location, frozenset)
+    #The size is 20x20 tiles.
     for i in range(20):
         for j in range(20):
             hut = (i, j)
             cover = set()
             for f in forest:
-                if distance(hut, f) <= 8:
+                if distance(hut, f) <= 8:# Euclidian distance
                     cover.add(f)
             if cover:
                 sets.append((hut, frozenset(cover)))
     return sets
 
 
-# -----------------------------
-# Greedy Set Cover (Section 5.4, Chapter 5)
-# -----------------------------
+"""
+Input: A set of elements B; sets S1, S2, ..., Sm is a subset of B. 
+Output: A selection of the Si whose union is B.
+Cost: Number of sets picked.
+
+Repeat until all elements B are covered:
+    Pick the set Si that covers the largest number of uncovered elements.
+"""
+#(d) Greedy Set Cover Algorithm
 def greedy_set_cover(universe, sets):
     U = set(universe)
     chosen = []
@@ -66,9 +70,6 @@ def greedy_set_cover(universe, sets):
     return chosen
 
 
-# -----------------------------
-# Main: Execute algorithm
-# -----------------------------
 def main():
     forest = load_forest_tiles()
     hut_sets = compute_hut_sets(forest)
