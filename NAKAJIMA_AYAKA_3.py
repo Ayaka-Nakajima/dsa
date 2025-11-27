@@ -1,49 +1,38 @@
 import networkx as nx
 import math
+"""
+Problem 3 (5 points). Determine which two locations are furthest away from each other in a maze.
 
+(b) Implement the Floyd–Warshall algorithm from Section 6.6 of the textbook as a function with the name
+floyd_warshall. It should take a graph as input and return a table of the distances from any node to
+any other node. The table should be returned as a dictionary where the keys are pairs of nodes and the
+values are the distances.
+(c) Find the node pairs which are furthest away from each other and print them. (There could be only one
+maximal distance pair or several.)
+(d)  In addition, you must also run the program on your computer and submit a screenshot or a
+copy of the output. Just the code alone will not receive full marks.
+"""
 
 def floyd_warshall(G):
-    """
-    教科書 Chapter 6 の Floyd–Warshall を
-    2次元配列ベースで実装した版。
-    戻り値: dist[(u, v)] の辞書
-    """
+
     nodes = list(G.nodes())
-    n = len(nodes)
+    dist = {}
+    for u in nodes:
+        for v in nodes:
+            if u == v:
+                dist[(u, v)] = 0
+            elif G.has_edge(u, v):
+                dist[(u, v)] = 1
+            else:
+                dist[(u, v)] = math.inf
 
-    # ノード → インデックス の対応表
-    idx = {node: i for i, node in enumerate(nodes)}
+    for k in nodes:
+        for i in nodes:
+            for j in nodes:
+                if dist[(i, j)] > dist[(i, k)] + dist[(k, j)]:
+                    dist[(i, j)] = dist[(i, k)] + dist[(k, j)]
 
-    # dist[i][j] テーブルを作成
-    dist = [[math.inf] * n for _ in range(n)]
-    for i in range(n):
-        dist[i][i] = 0
-
-    # エッジの重み（迷路なので全部 1）
-    for u, v in G.edges():
-        i = idx[u]
-        j = idx[v]
-        dist[i][j] = 1
-        dist[j][i] = 1      # 無向グラフ前提
-
-    # Floyd–Warshall 本体
-    for k in range(n):
-        for i in range(n):
-            dik = dist[i][k]
-            if dik == math.inf:
-                continue
-            for j in range(n):
-                new = dik + dist[k][j]
-                if new < dist[i][j]:
-                    dist[i][j] = new
-
-    # 辞書形式に変換して返す（課題仕様どおり）
-    dist_dict = {}
-    for i in range(n):
-        for j in range(n):
-            dist_dict[(nodes[i], nodes[j])] = dist[i][j]
-
-    return dist_dict
+    return dist
 
 
 def find_furthest_pairs(dist):
@@ -63,14 +52,9 @@ def find_furthest_pairs(dist):
 
 
 def main():
-    # maze02.gml を NAKAJIMA_AYAKA_3.py と同じフォルダに置いておくこと
     G = nx.read_gml("maze02.gml")
-
-    print("nodes:", len(G.nodes()), "edges:", len(G.edges()))
-
     dist = floyd_warshall(G)
     max_dist, pairs = find_furthest_pairs(dist)
-
     print("Longest shortest-path distance:", max_dist)
     print("Node pairs with this distance:")
     for u, v in pairs:
